@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "python3-poetry-pyenv"
+version = "0.1.0"
+description = ""
+authors = ["Marina Nakagawa <mari10172001@yahoo.co.jp>"]
+readme = "README.md"
+packages = [{include = "python3_poetry_pyenv"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+streamlit = "^1.24.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
