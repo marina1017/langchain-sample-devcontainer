@@ -1,9 +1,15 @@
 import streamlit as st
 from langchain.chat_models import ChatOpenAI
 from langchain.schema import (SystemMessage, HumanMessage, AIMessage)
-
+# 環境変数を使用する
+from dotenv import load_dotenv
+import os
 
 def main():
+    # .envファイルを読み込む
+    load_dotenv()
+    print(os.getenv('OPENAI_API_KEY'))
+
     st.set_page_config(
         page_title="My Great ChatGPT",
         page_icon="🤗"

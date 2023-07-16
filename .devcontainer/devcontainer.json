@@ -3,18 +3,74 @@
     "build": {
         "dockerfile": "Dockerfile"
     },
-    // 👇 Features to add to the Dev Container. More info: https://containers.dev/implementors/features.
-    // "features": {},
-    // 👇 Use 'forwardPorts' to make a list of ports inside the container available locally.
-    // "forwardPorts": [],
-    // 👇 Use 'postCreateCommand' to run commands after the container is created.
-    // "postCreateCommand": "",
-    // 👇 Configure tool-specific properties.
     "customizations": {
         "vscode": {
+            "settings": {
+                // ファイルの中に紛れ込んだ全角スペースを見つけやすくするための拡張
+                "editor.renderWhitespace": "all",
+                // Lint機能を有効にするかどうか
+                "python.linting.enabled": true,
+                // ファイル保存時にLintを実行するか
+                "python.linting.lintOnSave": true,
+                // Pylance
+                // "python.languageServer": "Pylance",
+                // "python.analysis.completeFunctionParens": true,
+                // Linter(flake8): コードがPEP8に準拠しているかをチェックする
+                "python.linting.flake8Path": "/usr/local/bin/flake8",
+                // pyLintをOFF
+                "python.linting.pylintEnabled": false,
+                // flake8をON
+                "python.linting.flake8Enabled": true,
+                "python.linting.flake8Args": [
+                    // black の最大文字列数(default= 88) と flake8 の最大文字列数(default= 79)と異なるため調整　(ref: https://dk521123.hatenablog.com/entry/2021/11/10/095258)
+                    "--max-line-length=210",
+                    // E203 :コロンの前に空白が入っている
+                    // W503: 演算子の前に改行
+                    // W504: 演算子の後に改行
+                    "--ignore=E203,W503,W504"
+                ],
+                "python.formatting.blackArgs": [
+                    // black の最大文字列数(default= 88) と flake8 の最大文字列数(default= 79)と異なるため調整
+                    "--line-length=210"
+                ],
+                // Formatter(black): 自動的にコードを整形する
+                "python.formatting.blackPath": "/usr/local/bin/black",
+                // Pythonコードの整形に何を使用するか
+                "python.formatting.provider": "black",
+                // 保存時にフォーマットをON
+                "editor.formatOnSave": true,
+                "[python]": {
+                    "editor.defaultFormatter": null
+                },
+                // pytest起動時のオプションを三つ設定 
+                // tests: 対象ディレクトリ,
+                // --capture=tee-sys: テストコード内で標準出力された内容をpytestがキャプチャしてターミナルに出力してくれる
+                // --vv: pytestがキャプチャした出力を途中で切らずに全て出力
+                "python.testing.pytestArgs": [
+                    "tests",
+                    "--capture=tee-sys",
+                    "-vv"
+                ],
+                // VS Codeがpytestを使ってテストコードを検索
+                "python.testing.pytestEnabled": true
+            },
+            // コンテナ作成時にインストールしたいエクステンションのIDを追加します。
             "extensions": [
+                // pythonの拡張
                 "ms-python.python",
-                "njpwerner.autodocstring"
+                "njpwerner.autodocstring",
+                // pythonのインデントを自動で生成する拡張 ref:https://marketplace.visualstudio.com/items?itemName=KevinRose.vsc-python-indent
+                "KevinRose.vsc-python-indent",
+                // GitHub Copilot
+                "GitHub.copilot",
+                // GitLens gitを視覚的に表現する拡張
+                "eamodio.gitlens",
+                // Flake8 Lint
+                "ms-python.flake8",
+                // Black Formatter
+                "ms-python.black-formatter",
+                // Annotationコメントを簡単に検索できる拡張
+                "Gruntfuggly.todo-tree"
             ]
         }
     }
