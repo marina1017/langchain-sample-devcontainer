@@ -1,5 +1,7 @@
 # このリポジトリの使い方
 - クローンしてください
+- .env.exampleをコピーして名前を.envに変更してください
+- .envファイルに必要な環境変数を入れてください
 - VSCodeで開いてdevcontainerの拡張を使ってコンテナで再度開くを押してください
 - コンテナ内で `poetry run streamlit run streamlit_app.py` を実行してください
 
