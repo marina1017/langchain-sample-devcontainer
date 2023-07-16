@@ -9,8 +9,12 @@ packages = [{include = "python3_poetry_pyenv"}]
 [tool.poetry.dependencies]
 python = "^3.10"
 streamlit = "^1.24.1"
+langchain = "^0.0.234"
 
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[server]
+fileWatcherType = "poll"
