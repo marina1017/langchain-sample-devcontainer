@@ -1,6 +1,13 @@
 import streamlit as st
 from langchain.chat_models import ChatOpenAI
-from langchain.schema import (SystemMessage, HumanMessage, AIMessage)
+from langchain.schema import (
+    # システムメッセージ
+    SystemMessage, 
+    # 人間の質問
+    HumanMessage, 
+    # ChatGPTの返答
+    AIMessage)
+
 # 環境変数を使用する
 from dotenv import load_dotenv
 import os
@@ -8,26 +15,41 @@ import os
 def main():
     # .envファイルを読み込む
     load_dotenv()
-    print(os.getenv('OPENAI_API_KEY'))
+    # ChatGPT APIを呼んでくれる機能
+    llm = ChatOpenAI(temperature=0, openai_api_key=os.environ.get("OPENAI_API_KEY"), model_name="gpt-3.5-turbo")
 
+    ## streamlitの設定 
     st.set_page_config(
         page_title="My Great ChatGPT",
         page_icon="🤗"
     )
     st.header("My Great ChatGPT 🤗")
-    # input
+
+    # チャット履歴の初期化
+    if "messages" not in st.session_state:
+        st.session_state.messages = [
+            SystemMessage(content="You are a helpful assistant.")
+        ]
+
+    # ユーザーの入力を監視
     if user_input := st.chat_input("聞きたいことを入力してね！"):
-        print("hoge")
-    
-    # input
-    container = st.container()
-    with container:
-        with st.form(key='my_form', clear_on_submit=True):
-            user_input = st.text_area(label="ききたいことを入力してね:",key="input",height=100)
-            submit_button = st.form_submit_button(label="Send")
-        if submit_button and user_input:
-            # なにか入力されればここが実行される
-            print("hogehogehgoe")
+        st.session_state.messages.append(HumanMessage(content=user_input))
+        with st.spinner("ChatGPT is typing ..."):
+            response = llm(st.session_state.messages)
+        st.session_state.messages.append(AIMessage(content=response.content))
+
+    # チャット履歴の表示
+    messages = st.session_state.get('messages', [])
+    for message in messages:
+        if isinstance(message, AIMessage):
+            with st.chat_message('assistant'):
+                st.markdown(message.content)
+        elif isinstance(message, HumanMessage):
+            with st.chat_message('user'):
+                st.markdown(message.content)
+        else:  # isinstance(message, SystemMessage):
+            st.write(f"System message: {message.content}")
+
 
 if __name__ == '__main__':
     main()
